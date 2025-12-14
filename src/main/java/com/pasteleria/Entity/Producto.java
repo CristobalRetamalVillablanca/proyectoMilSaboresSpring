@@ -24,7 +24,7 @@ public class Producto {
 
     // 🔗 Relación MANY-TO-ONE con Categoria
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id", nullable = false) // FK en PRODUCTO
+    @JoinColumn(name = "categoria_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Categoria categoria;
 
@@ -34,7 +34,9 @@ public class Producto {
     @Column(name = "descripcion", length = 1000)
     private String descripcion;
 
-    @Column(name = "imagen")
+    // 🔥 BASE64 largo → CLOB (OBLIGATORIO)
+    @Lob
+    @Column(name = "imagen", columnDefinition = "CLOB")
     private String imagen;
 
     @Column(name = "stock")
@@ -44,8 +46,7 @@ public class Producto {
     private Boolean activo = true;
 
     // ===== Constructor vacío requerido por JPA =====
-    public Producto() {
-    }
+    public Producto() {}
 
     // ===== Getters y Setters =====
     public Integer getId() {
@@ -129,7 +130,7 @@ public class Producto {
                 ", categoria=" + (categoria != null ? categoria.getNombre() : "null") +
                 ", precio_clp=" + precio_clp +
                 ", descripcion='" + descripcion + '\'' +
-                ", imagen='" + imagen + '\'' +
+                ", imagen='" + (imagen != null ? "[BASE64]" : "null") + '\'' +
                 ", stock=" + stock +
                 ", activo=" + activo +
                 '}';
